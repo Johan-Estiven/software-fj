@@ -21,6 +21,16 @@ Sistema orientado a objetos en Python, sin base de datos, que gestiona clientes,
 ```bash
 python software_fj.py
 ```
+Requiere Python 3.10 o superior. Al ejecutarlo se muestran en pantalla las 14 operaciones de la simulación y se genera el archivo `software_fj.log`.
+
+## Pruebas automáticas
+```bash
+python pruebas_software_fj.py
+```
+Ejecuta 21 pruebas sobre las validaciones de clientes, los costos de los servicios, las reservas y la continuidad del sistema ante errores.
+
+## Excepciones personalizadas
+`SoftwareFJError` (base), `ClienteInvalidoError`, `ServicioInvalidoError`, `ServicioNoDisponibleError`, `ReservaInvalidaError`, `OperacionNoPermitidaError` y `CalculoInconsistenteError`.
 
 ## Autor
 Johan-Estiven-Saavedra-Balanta
