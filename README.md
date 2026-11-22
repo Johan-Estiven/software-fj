@@ -15,7 +15,7 @@ Sistema orientado a objetos en Python, sin base de datos, que gestiona clientes,
 - Clase `Reserva` con confirmación, cancelación y procesamiento.
 - Excepciones personalizadas, `try/except/else/finally` y encadenamiento de excepciones.
 - Cálculo de costos con impuestos y descuentos opcionales.
-- Simulación de 12 operaciones válidas e inválidas.
+- Simulación de 14 operaciones válidas e inválidas.
 
 ## Cómo ejecutarlo
 ```bash
