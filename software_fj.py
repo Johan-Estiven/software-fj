@@ -8,7 +8,7 @@ Características:
 - Manejo avanzado de excepciones (personalizadas, try/except/else/finally, encadenamiento).
 - Sin base de datos: todo se maneja con objetos y listas.
 - Archivo de logs (software_fj.log) para eventos y errores.
-- Simulación de 12 operaciones (válidas e inválidas) que no detienen el programa.
+- Simulación de 14 operaciones (válidas e inválidas) que no detienen el programa.
 """
 
 import logging                      # Módulo estándar para escribir el archivo de logs
@@ -26,6 +26,11 @@ logging.basicConfig(
     encoding="utf-8",                # Codificación para tildes y eñes
 )
 logger = logging.getLogger("SoftwareFJ")  # Logger propio del sistema
+
+
+def es_numero(valor):
+    """True si el valor es int o float (los booleanos no cuentan como números)."""
+    return isinstance(valor, (int, float)) and not isinstance(valor, bool)
 
 
 # ---------------------------------------------------------------------------
@@ -91,11 +96,11 @@ class Cliente(Entidad):
     """Cliente de Software FJ con datos personales encapsulados y validados."""
 
     def __init__(self, nombre, correo, telefono):
-        super().__init__()                       # Inicializa el id de la entidad
         # Se asignan mediante los setters para que las validaciones se apliquen
         self.nombre = nombre
         self.correo = correo
         self.telefono = telefono
+        super().__init__()                       # El id se asigna solo si los datos son válidos
 
     # --- nombre ---
     @property
@@ -149,11 +154,11 @@ class Servicio(Entidad, ABC):
     IVA = 0.19  # Impuesto por defecto (19 %)
 
     def __init__(self, nombre, tarifa_hora, disponible=True):
-        super().__init__()
         if not isinstance(nombre, str) or not nombre.strip():
             raise ServicioInvalidoError("El servicio requiere un nombre válido.")
-        if not isinstance(tarifa_hora, (int, float)) or tarifa_hora <= 0:
+        if not es_numero(tarifa_hora) or tarifa_hora <= 0:
             raise ServicioInvalidoError(f"Tarifa por hora inválida: {tarifa_hora!r}")
+        super().__init__()                       # El id se asigna solo si los datos son válidos
         self._nombre = nombre.strip()            # Atributo protegido
         self._tarifa_hora = float(tarifa_hora)
         self._disponible = bool(disponible)
@@ -189,7 +194,7 @@ class Servicio(Entidad, ABC):
         """
         self.validar_parametros(horas)
         impuesto = self.IVA if impuesto is None else impuesto
-        if not 0 <= impuesto <= 1 or not 0 <= descuento < 1:
+        if not es_numero(impuesto) or not es_numero(descuento) or not 0 <= impuesto <= 1 or not 0 <= descuento < 1:
             raise CalculoInconsistenteError(
                 f"Impuesto ({impuesto}) o descuento ({descuento}) fuera de rango."
             )
@@ -208,13 +213,13 @@ class ReservaSala(Servicio):
     """Servicio de reserva de salas (con capacidad máxima de personas)."""
 
     def __init__(self, nombre, tarifa_hora, capacidad, disponible=True):
-        super().__init__(nombre, tarifa_hora, disponible)
-        if not isinstance(capacidad, int) or capacidad <= 0:
+        if not isinstance(capacidad, int) or isinstance(capacidad, bool) or capacidad <= 0:
             raise ServicioInvalidoError(f"Capacidad inválida: {capacidad!r}")
+        super().__init__(nombre, tarifa_hora, disponible)
         self._capacidad = capacidad
 
     def validar_parametros(self, horas):
-        if not isinstance(horas, (int, float)) or not 1 <= horas <= 8:
+        if not es_numero(horas) or not 1 <= horas <= 8:
             raise ServicioInvalidoError("Las salas se reservan entre 1 y 8 horas.")
 
     def calcular_costo_base(self, horas):
@@ -230,13 +235,13 @@ class AlquilerEquipo(Servicio):
     DEPOSITO = 20000  # Depósito fijo por alquiler
 
     def __init__(self, nombre, tarifa_hora, tipo_equipo, disponible=True):
-        super().__init__(nombre, tarifa_hora, disponible)
         if not isinstance(tipo_equipo, str) or not tipo_equipo.strip():
             raise ServicioInvalidoError("El tipo de equipo es obligatorio.")
+        super().__init__(nombre, tarifa_hora, disponible)
         self._tipo_equipo = tipo_equipo.strip()
 
     def validar_parametros(self, horas):
-        if not isinstance(horas, (int, float)) or not 1 <= horas <= 72:
+        if not es_numero(horas) or not 1 <= horas <= 72:
             raise ServicioInvalidoError("Los equipos se alquilan entre 1 y 72 horas.")
 
     def calcular_costo_base(self, horas):
@@ -250,14 +255,14 @@ class Asesoria(Servicio):
     """Servicio de asesoría especializada (recargo por nivel de experto)."""
 
     def __init__(self, nombre, tarifa_hora, especialidad, nivel_experto=False, disponible=True):
-        super().__init__(nombre, tarifa_hora, disponible)
         if not isinstance(especialidad, str) or not especialidad.strip():
             raise ServicioInvalidoError("La especialidad es obligatoria.")
+        super().__init__(nombre, tarifa_hora, disponible)
         self._especialidad = especialidad.strip()
         self._nivel_experto = bool(nivel_experto)
 
     def validar_parametros(self, horas):
-        if not isinstance(horas, (int, float)) or not 0.5 <= horas <= 6:
+        if not es_numero(horas) or not 0.5 <= horas <= 6:
             raise ServicioInvalidoError("Las asesorías duran entre 0.5 y 6 horas.")
 
     def calcular_costo_base(self, horas):
@@ -278,7 +283,6 @@ class Reserva(Entidad):
     ESTADOS = ("PENDIENTE", "CONFIRMADA", "CANCELADA")
 
     def __init__(self, cliente, servicio, horas):
-        super().__init__()
         if not isinstance(cliente, Cliente):
             raise ReservaInvalidaError("La reserva requiere un Cliente válido.")
         if not isinstance(servicio, Servicio):
@@ -288,6 +292,7 @@ class Reserva(Entidad):
         except ServicioInvalidoError as error:
             # Encadenamiento de excepciones: se conserva la causa original con "from"
             raise ReservaInvalidaError(f"Duración inválida para la reserva: {horas!r}") from error
+        super().__init__()                       # El id se asigna solo si la reserva es válida
         self._cliente = cliente
         self._servicio = servicio
         self._horas = horas
@@ -393,6 +398,11 @@ class GestorFJ:
             return reserva
 
     def procesar_reserva(self, reserva, descuento=0.0):
+        if not isinstance(reserva, Reserva):
+            # Evita un AttributeError si la reserva no pudo crearse
+            logger.error("Intento de procesar una reserva inexistente: %r", reserva)
+            print("   [ERROR] No hay una reserva válida para procesar.")
+            return None
         try:
             costo = reserva.procesar(descuento)
         except ReservaInvalidaError as error:
@@ -400,6 +410,32 @@ class GestorFJ:
             return None
         else:
             print(f"   [OK] Reserva #{reserva.id} confirmada. Total a pagar: ${costo:,.2f}")
+            return costo
+
+
+    def cancelar_reserva(self, reserva):
+        """Cancela una reserva controlando operaciones no permitidas."""
+        try:
+            reserva.cancelar()
+        except OperacionNoPermitidaError as error:
+            logger.error("Cancelación no permitida: %s", error)
+            print(f"   [ERROR] {error}")
+        except AttributeError:
+            logger.error("Intento de cancelar una reserva inexistente: %r", reserva)
+            print("   [ERROR] No hay una reserva válida para cancelar.")
+        else:
+            print(f"   [OK] {reserva}")
+
+    def calcular_costo_seguro(self, servicio, horas, **opciones):
+        """Calcula un costo capturando cálculos inconsistentes y parámetros inválidos."""
+        try:
+            costo = servicio.calcular_costo(horas, **opciones)
+        except (CalculoInconsistenteError, ServicioInvalidoError) as error:
+            logger.error("Cálculo de costo fallido en '%s': %s", servicio.nombre, error)
+            print(f"   [ERROR] {error}")
+            return None
+        else:
+            print(f"   [OK] Costo de '{servicio.nombre}': ${costo:,.2f}")
             return costo
 
 
@@ -448,11 +484,17 @@ def simular():
     r2 = g.crear_reserva(carlos, asesoria, 2)
     g.procesar_reserva(r2)
 
-    print("\n12) Operación no permitida: confirmar una reserva ya cancelada")
+    print("\n12) Operación no permitida: procesar una reserva ya cancelada")
     asesoria.disponible = True
     r3 = g.crear_reserva(carlos, equipo, 5)
-    r3.cancelar()
+    g.cancelar_reserva(r3)
     g.procesar_reserva(r3)
+
+    print("\n13) Cálculo inconsistente: descuento de 150% (fuera de rango)")
+    g.calcular_costo_seguro(sala, 2, descuento=1.5)
+
+    print("\n14) Reserva incorrecta: cliente inexistente (None)")
+    g.crear_reserva(None, sala, 2)
 
     print("\n--- Demostración de polimorfismo y sobrecarga de costos ---")
     for s in g.servicios:
@@ -461,9 +503,25 @@ def simular():
               f"sin IVA=${s.calcular_costo(horas, impuesto=0):,.2f} | "
               f"con 15% desc.=${s.calcular_costo(horas, descuento=0.15):,.2f}")
 
+    print("\n--- Resumen final ---")
+    print(f"Clientes: {len(g.clientes)} | Servicios: {len(g.servicios)} | Reservas: {len(g.reservas)}")
+    for reserva in g.reservas:
+        print(f"   {reserva}")
+
     logger.info("===== FIN DE LA SIMULACIÓN =====")
     print("\nSimulación terminada. Revise el archivo 'software_fj.log'.")
 
 
+def main():
+    """Punto de entrada: ningún error inesperado debe detener el programa sin registrarse."""
+    try:
+        simular()
+    except Exception as error:  # Última barrera para errores no previstos
+        logger.critical("Error inesperado en la simulación: %s", error, exc_info=True)
+        print(f"[ERROR CRÍTICO] {error}. Revise 'software_fj.log'.")
+    finally:
+        logging.shutdown()      # Asegura que el archivo de logs quede cerrado y guardado
+
+
 if __name__ == "__main__":
-    simular()
+    main()
