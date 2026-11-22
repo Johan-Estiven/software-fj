@@ -1,0 +1,48 @@
+2026-11-22 17:11:20,921 | INFO     | ===== INICIO DE LA SIMULACIÓN =====
+2026-11-22 17:11:20,923 | INFO     | Cliente registrado: Cliente #1: Ana María Pérez | ana.perez@correo.com | 3101234567
+2026-11-22 17:11:20,924 | ERROR    | Registro de cliente fallido: Correo inválido: 'luis-correo.com'
+2026-11-22 17:11:20,925 | ERROR    | Registro de cliente fallido: Teléfono inválido: '12345' (debe tener 10 dígitos y empezar en 3).
+2026-11-22 17:11:20,926 | INFO     | Cliente registrado: Cliente #4: Carlos Ruiz | carlos@correo.com | 3157654321
+2026-11-22 17:11:20,926 | INFO     | Servicio creado: Servicio #5: Sala Ejecutiva | $50,000/h | Disponible | Sala para 10 personas
+2026-11-22 17:11:20,928 | INFO     | Servicio creado: Servicio #6: Portátil Pro | $8,000/h | Disponible | Equipo: Computador
+2026-11-22 17:11:20,929 | INFO     | Servicio creado: Servicio #7: Asesoría en Redes | $90,000/h | Disponible | Asesoría en Redes (Experto)
+2026-11-22 17:11:20,930 | ERROR    | Creación de servicio fallida (ReservaSala): Tarifa por hora inválida: -100
+2026-11-22 17:11:20,931 | ERROR    | Creación de servicio fallida (AlquilerEquipo): AlquilerEquipo.__init__() missing 1 required positional argument: 'tipo_equipo'
+2026-11-22 17:11:20,931 | INFO     | Reserva creada: Reserva #9 | Ana María Pérez -> Sala Ejecutiva | 3 h | PENDIENTE
+2026-11-22 17:11:20,932 | INFO     | Reserva #9 confirmada.
+2026-11-22 17:11:20,932 | INFO     | Reserva #9 procesada. Costo: $160,650.00
+2026-11-22 17:11:20,932 | INFO     | Fin del procesamiento de la reserva #9 (estado: CONFIRMADA).
+2026-11-22 17:11:20,933 | ERROR    | Creación de reserva fallida: Duración inválida para la reserva: 20 (causa: Las salas se reservan entre 1 y 8 horas.)
+2026-11-22 17:11:20,934 | INFO     | Reserva creada: Reserva #11 | Carlos Ruiz -> Asesoría en Redes | 2 h | PENDIENTE
+2026-11-22 17:11:20,935 | ERROR    | Fallo al procesar reserva #11: 'Asesoría en Redes' no está disponible.
+2026-11-22 17:11:20,935 | INFO     | Fin del procesamiento de la reserva #11 (estado: PENDIENTE).
+2026-11-22 17:11:20,936 | INFO     | Reserva creada: Reserva #12 | Carlos Ruiz -> Portátil Pro | 5 h | PENDIENTE
+2026-11-22 17:11:20,936 | INFO     | Reserva #12 cancelada.
+2026-11-22 17:11:20,936 | ERROR    | Fallo al procesar reserva #12: No se puede confirmar una reserva en estado CANCELADA.
+2026-11-22 17:11:20,936 | INFO     | Fin del procesamiento de la reserva #12 (estado: CANCELADA).
+2026-11-22 17:11:20,938 | INFO     | ===== FIN DE LA SIMULACIÓN =====
+2026-11-22 17:56:27,130 | INFO     | ===== INICIO DE LA SIMULACIÓN =====
+2026-11-22 17:56:27,130 | INFO     | Cliente registrado: Cliente #1: Ana María Pérez | ana.perez@correo.com | 3101234567
+2026-11-22 17:56:27,131 | ERROR    | Registro de cliente fallido: Correo inválido: 'luis-correo.com'
+2026-11-22 17:56:27,131 | ERROR    | Registro de cliente fallido: Teléfono inválido: '12345' (debe tener 10 dígitos y empezar en 3).
+2026-11-22 17:56:27,131 | INFO     | Cliente registrado: Cliente #2: Carlos Ruiz | carlos@correo.com | 3157654321
+2026-11-22 17:56:27,131 | INFO     | Servicio creado: Servicio #3: Sala Ejecutiva | $50,000/h | Disponible | Sala para 10 personas
+2026-11-22 17:56:27,131 | INFO     | Servicio creado: Servicio #4: Portátil Pro | $8,000/h | Disponible | Equipo: Computador
+2026-11-22 17:56:27,131 | INFO     | Servicio creado: Servicio #5: Asesoría en Redes | $90,000/h | Disponible | Asesoría en Redes (Experto)
+2026-11-22 17:56:27,132 | ERROR    | Creación de servicio fallida (ReservaSala): Tarifa por hora inválida: -100
+2026-11-22 17:56:27,132 | ERROR    | Creación de servicio fallida (AlquilerEquipo): AlquilerEquipo.__init__() missing 1 required positional argument: 'tipo_equipo'
+2026-11-22 17:56:27,132 | INFO     | Reserva creada: Reserva #6 | Ana María Pérez -> Sala Ejecutiva | 3 h | PENDIENTE
+2026-11-22 17:56:27,132 | INFO     | Reserva #6 confirmada.
+2026-11-22 17:56:27,132 | INFO     | Reserva #6 procesada. Costo: $160,650.00
+2026-11-22 17:56:27,132 | INFO     | Fin del procesamiento de la reserva #6 (estado: CONFIRMADA).
+2026-11-22 17:56:27,132 | ERROR    | Creación de reserva fallida: Duración inválida para la reserva: 20 (causa: Las salas se reservan entre 1 y 8 horas.)
+2026-11-22 17:56:27,132 | INFO     | Reserva creada: Reserva #7 | Carlos Ruiz -> Asesoría en Redes | 2 h | PENDIENTE
+2026-11-22 17:56:27,133 | ERROR    | Fallo al procesar reserva #7: 'Asesoría en Redes' no está disponible.
+2026-11-22 17:56:27,133 | INFO     | Fin del procesamiento de la reserva #7 (estado: PENDIENTE).
+2026-11-22 17:56:27,133 | INFO     | Reserva creada: Reserva #8 | Carlos Ruiz -> Portátil Pro | 5 h | PENDIENTE
+2026-11-22 17:56:27,133 | INFO     | Reserva #8 cancelada.
+2026-11-22 17:56:27,133 | ERROR    | Fallo al procesar reserva #8: No se puede confirmar una reserva en estado CANCELADA.
+2026-11-22 17:56:27,133 | INFO     | Fin del procesamiento de la reserva #8 (estado: CANCELADA).
+2026-11-22 17:56:27,133 | ERROR    | Cálculo de costo fallido en 'Sala Ejecutiva': Impuesto (0.19) o descuento (1.5) fuera de rango.
+2026-11-22 17:56:27,133 | ERROR    | Creación de reserva fallida: La reserva requiere un Cliente válido.
+2026-11-22 17:56:27,133 | INFO     | ===== FIN DE LA SIMULACIÓN =====
